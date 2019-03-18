@@ -71,11 +71,8 @@ gpsLocation_t GPS_home;
 uint16_t      GPS_distanceToHome;        // distance to home point in meters
 int16_t       GPS_directionToHome;       // direction to home point in degrees
 
-<<<<<<< HEAD
-=======
 squad_pois_t squad_pois[SQUAD_MAX_POIS];
 
->>>>>>> 7617c97... Heavy renaming
 #if defined(USE_NAV)
 #if defined(NAV_NON_VOLATILE_WAYPOINT_STORAGE)
 PG_DECLARE_ARRAY(navWaypoint_t, NAV_MAX_WAYPOINTS, nonVolatileWaypointList);
@@ -1923,6 +1920,13 @@ static int32_t calculateBearingFromDelta(float deltaX, float deltaY)
     return wrap_36000(RADIANS_TO_CENTIDEGREES(atan2_approx(deltaY, deltaX)));
 }
 
+uint32_t calculateAltitudeToMe(const fpVector3_t * destinationPos)
+{
+    const float deltaZ = destinationPos->z - navGetCurrentActualPositionAndVelocity()->pos.z;
+
+    return deltaZ;
+}
+
 uint32_t calculateDistanceToDestination(const fpVector3_t * destinationPos)
 {
     const navEstimatedPosVel_t *posvel = navGetCurrentActualPositionAndVelocity();
@@ -2175,8 +2179,6 @@ void updateHomePosition(void)
 }
 
 /*-----------------------------------------------------------
-<<<<<<< HEAD
-=======
  * Squad, get the point of interests from the waypoints 1 to 5
  *-----------------------------------------------------------*/
 
@@ -2223,7 +2225,6 @@ static void squadUpdatePois(void){
 }
 
 /*-----------------------------------------------------------
->>>>>>> 7617c97... Heavy renaming
  * Update flight statistics
  *-----------------------------------------------------------*/
 static void updateNavigationFlightStatistics(void)
@@ -3059,12 +3060,9 @@ void updateWaypointsAndNavigationMode(void)
     // Map navMode back to enabled flight modes
     switchNavigationFlightModes();
 
-<<<<<<< HEAD
-=======
     // Update Inav Radar
     squadUpdatePois();
     
->>>>>>> 7617c97... Heavy renaming
 #if defined(NAV_BLACKBOX)
     navCurrentState = (int16_t)posControl.navPersistentId;
 #endif

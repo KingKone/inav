@@ -339,7 +339,6 @@ static const OSD_Entry menuOsdSettingsEntries[] = {
 
     OSD_SETTING_ENTRY("VOLT. DECIMALS", SETTING_OSD_MAIN_VOLTAGE_DECIMALS),
     OSD_SETTING_ENTRY("COORD. DIGITS", SETTING_OSD_COORDINATE_DIGITS),
-    OSD_SETTING_ENTRY("CROSSHAIRS STYLE", SETTING_OSD_CROSSHAIRS_STYLE),
     OSD_SETTING_ENTRY("LEFT SCROLL", SETTING_OSD_LEFT_SIDEBAR_SCROLL),
     OSD_SETTING_ENTRY("RIGHT SCROLL", SETTING_OSD_RIGHT_SIDEBAR_SCROLL),
     OSD_SETTING_ENTRY("SCROLL ARROWS", SETTING_OSD_SIDEBAR_SCROLL_ARROWS),
@@ -360,8 +359,6 @@ static const CMS_Menu cmsx_menuOsdSettings = {
     .entries = menuOsdSettingsEntries,
 };
 
-<<<<<<< HEAD
-=======
 static const OSD_Entry menuOsdHudEntries[] = {
     OSD_LABEL_ENTRY("--- HUD ---"),
 
@@ -391,13 +388,13 @@ static const CMS_Menu cmsx_menuOsdHud = {
 };
 
 
->>>>>>> 7617c97... Heavy renaming
 static const OSD_Entry menuOsdEntries[] = {
     OSD_LABEL_ENTRY("--- OSD ---"),
 
     OSD_SUBMENU_ENTRY("LAYOUTS", &cmsx_menuOsdLayout),
     OSD_SUBMENU_ENTRY("SETTINGS", &cmsx_menuOsdSettings),
     OSD_SUBMENU_ENTRY("ALARMS", &cmsx_menuAlarms),
+    OSD_SUBMENU_ENTRY("HUD", &cmsx_menuOsdHud),
 
     OSD_BACK_ENTRY,
     OSD_END_ENTRY,

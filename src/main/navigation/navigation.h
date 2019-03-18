@@ -225,8 +225,6 @@ typedef struct {
     uint8_t flag;
 } navWaypoint_t;
 
-<<<<<<< HEAD
-=======
 typedef struct squad_pois_s {
     navWaypoint_t waypoint;
     uint16_t waypoint_id;
@@ -241,7 +239,6 @@ typedef struct squad_pois_s {
 #define SQUAD_MAX_POIS 5
 extern squad_pois_t squad_pois[SQUAD_MAX_POIS];
 
->>>>>>> 7617c97... Heavy renaming
 typedef struct {
     fpVector3_t pos;
     int32_t     yaw;             // deg * 100

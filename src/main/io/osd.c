@@ -131,6 +131,13 @@
 #define OSD_CENTER_LEN(x) ((osdDisplayPort->cols - x) / 2)
 #define OSD_CENTER_S(s) OSD_CENTER_LEN(strlen(s))
 
+#define OSD_HOMING_LIM_H1 7
+#define OSD_HOMING_LIM_H2 17
+#define OSD_HOMING_LIM_H3 40
+#define OSD_HOMING_LIM_V1 5
+#define OSD_HOMING_LIM_V2 10
+#define OSD_HOMING_LIM_V3 15
+
 #define OSD_MIN_FONT_VERSION 1
 
 static unsigned currentLayout = 0;
@@ -182,6 +189,10 @@ static displayPort_t *osdDisplayPort;
 #define AH_SIDEBAR_HEIGHT_POS 3
 
 PG_REGISTER_WITH_RESET_FN(osdConfig_t, osdConfig, PG_OSD_CONFIG, 7);
+
+#define HUD_DRAWN_MAXCHARS 42 // 7 POI (1 home, 3 aicrafts, 3 waypoints) x 6 chars max for each
+static int8_t hud_drawn[HUD_DRAWN_MAXCHARS][2];
+static int8_t hud_drawn_pt;
 
 static int digitCount(int32_t value)
 {
@@ -807,21 +818,14 @@ static void osdUpdateBatteryCapacityOrVoltageTextAttributes(textAttributes_t *at
         TEXT_ATTRIBUTES_ADD_BLINK(*attr);
 }
 
-static void osdCrosshairsBounds(uint8_t *x, uint8_t *y, uint8_t *length)
+static void osdCrosshairPosition(uint8_t *x, uint8_t *y)
 {
-    *x = 14 - 1; // Offset for 1 char to the left
+    *x = 14;
     *y = 6;
     if (IS_DISPLAY_PAL) {
         ++(*y);
     }
-    int size = 3;
-    if (osdConfig()->crosshairs_style == OSD_CROSSHAIRS_STYLE_AIRCRAFT) {
-        (*x)--;
-        size = 5;
-    }
-    if (length) {
-        *length = size;
-    }
+    *y += osdConfig()->horizon_offset;
 }
 
 /**
@@ -1136,8 +1140,6 @@ static void osdDrawRadar(uint16_t *drawn, uint32_t *usedScale)
     osdDrawMap(reference, 0, SYM_ARROW_UP, GPS_distanceToHome, poiDirection, SYM_HOME, drawn, usedScale);
 }
 
-<<<<<<< HEAD
-=======
 /* Overwrite all previously written positions on the OSD with a blank
  */
 
@@ -1263,7 +1265,6 @@ static void osdHudDrawPoi(uint32_t poiDistance, int16_t poiDirection, int32_t po
     osdHudWrite3digits(hud_poi_x - 1, hud_poi_y + 1, poiDistance);    
 }
 
->>>>>>> 7617c97... Heavy renaming
 static int16_t osdGet3DSpeed(void)
 {
     int16_t vert_speed = getEstimatedActualVelocity(Z);
@@ -1627,8 +1628,8 @@ static bool osdDrawSingleElement(uint8_t item)
             int32_t alt = osdGetAltitudeMsl();
             osdFormatAltitudeSymbol(buff, alt);
             break;
-        }		
-		
+        }
+
     case OSD_ONTIME:
         {
             osdFormatOnTime(buff);
@@ -1786,24 +1787,6 @@ static bool osdDrawSingleElement(uint8_t item)
         break;
 
     case OSD_CROSSHAIRS:
-<<<<<<< HEAD
-        osdCrosshairsBounds(&elemPosX, &elemPosY, NULL);
-        switch ((osd_crosshairs_style_e)osdConfig()->crosshairs_style) {
-            case OSD_CROSSHAIRS_STYLE_DEFAULT:
-                buff[0] = SYM_AH_CH_LEFT;
-                buff[1] = SYM_AH_CH_CENTER;
-                buff[2] = SYM_AH_CH_RIGHT;
-                buff[3] = '\0';
-                break;
-            case OSD_CROSSHAIRS_STYLE_AIRCRAFT:
-                buff[0] = SYM_AH_CH_AIRCRAFT0;
-                buff[1] = SYM_AH_CH_AIRCRAFT1;
-                buff[2] = SYM_AH_CH_AIRCRAFT2;
-                buff[3] = SYM_AH_CH_AIRCRAFT3;
-                buff[4] = SYM_AH_CH_AIRCRAFT4;
-                buff[5] = '\0';
-                break;
-=======
 
         osdCrosshairPosition(&elemPosX, &elemPosY);
 
@@ -1944,8 +1927,9 @@ static bool osdDrawSingleElement(uint8_t item)
                     }
                 }
             }
->>>>>>> 7617c97... Heavy renaming
         }
+
+        return true;
         break;
 
     case OSD_ATTITUDE_ROLL:
@@ -1967,9 +1951,7 @@ static bool osdDrawSingleElement(uint8_t item)
 
     case OSD_ARTIFICIAL_HORIZON:
         {
-
-            elemPosX = 14;
-            elemPosY = 6; // Center of the AH area
+            osdCrosshairPosition(&elemPosX, &elemPosY);
 
             // Store the positions we draw over to erase only these at the next iteration
             static int8_t previous_written[AH_PREV_SIZE];
@@ -1982,10 +1964,6 @@ static bool osdDrawSingleElement(uint8_t item)
 
             if (osdConfig()->ahi_reverse_roll) {
                 rollAngle = -rollAngle;
-            }
-
-            if (IS_DISPLAY_PAL) {
-                ++elemPosY;
             }
 
             float ky = sin_approx(rollAngle);
@@ -2046,12 +2024,7 @@ static bool osdDrawSingleElement(uint8_t item)
 
     case OSD_HORIZON_SIDEBARS:
         {
-            elemPosX = 14;
-            elemPosY = 6;
-
-            if (IS_DISPLAY_PAL) {
-                ++elemPosY;
-            }
+            osdCrosshairPosition(&elemPosX, &elemPosY);
 
             static osd_sidebar_t left;
             static osd_sidebar_t right;
@@ -2951,8 +2924,6 @@ void pgResetFn_osdConfig(osdConfig_t *osdConfig)
     osdConfig->ahi_reverse_roll = 0;
     osdConfig->ahi_max_pitch = AH_MAX_PITCH_DEFAULT;
     osdConfig->crosshairs_style = OSD_CROSSHAIRS_STYLE_DEFAULT;
-<<<<<<< HEAD
-=======
     osdConfig->homing = 0;
     osdConfig->homing_focus = OSD_HOMING_FOCUS_MEDIUM;
     osdConfig->camera_uptilt = 0;
@@ -2961,7 +2932,6 @@ void pgResetFn_osdConfig(osdConfig_t *osdConfig)
     osdConfig->hud_disp_home = 0;
     osdConfig->hud_disp_squadpois = 0;
     osdConfig->horizon_offset = 0;
->>>>>>> 7617c97... Heavy renaming
     osdConfig->left_sidebar_scroll = OSD_SIDEBAR_SCROLL_NONE;
     osdConfig->right_sidebar_scroll = OSD_SIDEBAR_SCROLL_NONE;
     osdConfig->sidebar_scroll_arrows = 0;
@@ -3233,7 +3203,7 @@ static void osdShowArmed(void)
             displayWrite(osdDisplayPort, (osdDisplayPort->cols - strlen(buf)) / 2, y + 1, buf);
             int digits = osdConfig()->plus_code_digits;
             olc_encode(GPS_home.lat, GPS_home.lon, digits, buf, sizeof(buf));
-			displayWrite(osdDisplayPort, (osdDisplayPort->cols - strlen(buf)) / 2, y + 2, buf);
+            displayWrite(osdDisplayPort, (osdDisplayPort->cols - strlen(buf)) / 2, y + 2, buf);
             y += 4;
         } else {
             strcpy(buf, "!NO HOME POSITION!");
