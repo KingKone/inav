@@ -71,6 +71,11 @@ gpsLocation_t GPS_home;
 uint16_t      GPS_distanceToHome;        // distance to home point in meters
 int16_t       GPS_directionToHome;       // direction to home point in degrees
 
+<<<<<<< HEAD
+=======
+squad_pois_t squad_pois[SQUAD_MAX_POIS];
+
+>>>>>>> 7617c97... Heavy renaming
 #if defined(USE_NAV)
 #if defined(NAV_NON_VOLATILE_WAYPOINT_STORAGE)
 PG_DECLARE_ARRAY(navWaypoint_t, NAV_MAX_WAYPOINTS, nonVolatileWaypointList);
@@ -2170,6 +2175,55 @@ void updateHomePosition(void)
 }
 
 /*-----------------------------------------------------------
+<<<<<<< HEAD
+=======
+ * Squad, get the point of interests from the waypoints 1 to 5
+ *-----------------------------------------------------------*/
+
+static void squadUpdatePois(void){
+    gpsLocation_t poi_position;
+    fpVector3_t poi;
+
+    for (int i = 0; i < SQUAD_MAX_POIS; i++) {
+        getWaypoint(i + 1, &squad_pois[i].waypoint);
+        
+        if (squad_pois[i].waypoint.lat != 0 && squad_pois[i].waypoint.lon != 0) {
+            squad_pois[i].waypoint_id = i + 1;
+            
+            squad_pois[i].speed = squad_pois[i].waypoint.p1; // The speed of the other aircraft
+            squad_pois[i].heading = squad_pois[i].waypoint.p2; // The heading of the other aircraft
+            squad_pois[i].state = squad_pois[i].waypoint.p3; // 0=undefined, 1=armed, 2=hidden
+            
+            poi_position.lat = squad_pois[i].waypoint.lat;
+            poi_position.lon = squad_pois[i].waypoint.lon;
+            poi_position.alt = squad_pois[i].waypoint.alt;
+            
+            geoConvertGeodeticToLocal(&poi, &posControl.gpsOrigin, &poi_position, GEO_ALT_RELATIVE);
+            
+            squad_pois[i].distance = calculateDistanceToDestination(&poi);
+            squad_pois[i].direction = calculateBearingToDestination(&poi);
+            squad_pois[i].altitude = calculateAltitudeToMe(&poi);
+        }
+        else {
+            squad_pois[i].state = 0;
+        }
+    }
+
+    // ----------------- DEBUG
+    
+    squad_pois[4].state = 1;
+    squad_pois[4].waypoint_id = 5;
+    squad_pois[4].speed = 7700;
+    squad_pois[4].heading = 18000;
+    squad_pois[4].distance = 15000;
+    squad_pois[4].direction = 4500;
+    squad_pois[4].altitude = -5000;    
+    
+    // ----------------- DEBUG
+}
+
+/*-----------------------------------------------------------
+>>>>>>> 7617c97... Heavy renaming
  * Update flight statistics
  *-----------------------------------------------------------*/
 static void updateNavigationFlightStatistics(void)
@@ -3005,6 +3059,12 @@ void updateWaypointsAndNavigationMode(void)
     // Map navMode back to enabled flight modes
     switchNavigationFlightModes();
 
+<<<<<<< HEAD
+=======
+    // Update Inav Radar
+    squadUpdatePois();
+    
+>>>>>>> 7617c97... Heavy renaming
 #if defined(NAV_BLACKBOX)
     navCurrentState = (int16_t)posControl.navPersistentId;
 #endif

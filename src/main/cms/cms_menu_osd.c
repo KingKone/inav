@@ -360,6 +360,38 @@ static const CMS_Menu cmsx_menuOsdSettings = {
     .entries = menuOsdSettingsEntries,
 };
 
+<<<<<<< HEAD
+=======
+static const OSD_Entry menuOsdHudEntries[] = {
+    OSD_LABEL_ENTRY("--- HUD ---"),
+
+    OSD_SETTING_ENTRY("CROSSHAIRS STYLE", SETTING_OSD_CROSSHAIRS_STYLE),
+    OSD_SETTING_ENTRY("HORIZON OFFSET", SETTING_OSD_HORIZON_OFFSET),
+    OSD_SETTING_ENTRY("HOMING ARROWS", SETTING_OSD_HOMING),
+    OSD_SETTING_ENTRY("HOMING FOCUS", SETTING_OSD_HOMING_FOCUS),
+    OSD_SETTING_ENTRY("CAMERA UPTILT", SETTING_OSD_CAMERA_UPTILT),
+    OSD_SETTING_ENTRY("CAMERA FOV HOR", SETTING_OSD_CAMERA_FOV_H),
+    OSD_SETTING_ENTRY("CAMERA FOV VER", SETTING_OSD_CAMERA_FOV_V),
+    OSD_SETTING_ENTRY("SHOW HOME", SETTING_OSD_HUD_DISP_HOME),
+    OSD_SETTING_ENTRY("SHOW SQUAD POI", SETTING_OSD_HUD_DISP_SQUADPOIS),
+
+    OSD_BACK_ENTRY,
+    OSD_END_ENTRY,
+};
+
+static const CMS_Menu cmsx_menuOsdHud = {
+#ifdef CMS_MENU_DEBUG
+    .GUARD_text = "MENUOSDH",
+    .GUARD_type = OME_MENU,
+#endif
+    .onEnter = NULL,
+    .onExit = NULL,
+    .onGlobalExit = NULL,
+    .entries = menuOsdHudEntries,
+};
+
+
+>>>>>>> 7617c97... Heavy renaming
 static const OSD_Entry menuOsdEntries[] = {
     OSD_LABEL_ENTRY("--- OSD ---"),
 
