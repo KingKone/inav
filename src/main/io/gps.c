@@ -41,6 +41,8 @@
 #include "drivers/system.h"
 #include "drivers/time.h"
 
+#define USE_FAKE_GPS 1
+
 #if defined(USE_FAKE_GPS)
 #include "fc/runtime_config.h"
 #endif
@@ -254,8 +256,10 @@ void gpsInit(void)
 #ifdef USE_FAKE_GPS
 static bool gpsFakeGPSUpdate(void)
 {
-#define FAKE_GPS_INITIAL_LAT 509102311
-#define FAKE_GPS_INITIAL_LON -15349744
+  // Start 50.100535, 8.813358
+  // Fake plane 50.101936, 8.812965
+#define FAKE_GPS_INITIAL_LAT 501019360
+#define FAKE_GPS_INITIAL_LON 88129650
 #define FAKE_GPS_GROUND_ARMED_SPEED 350 // In cm/s
 #define FAKE_GPS_GROUND_UNARMED_SPEED 0
 #define FAKE_GPS_GROUND_COURSE_DECIDEGREES 300 //30deg
