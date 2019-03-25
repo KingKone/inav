@@ -1684,7 +1684,7 @@ groups:
         max: 6
       - name: osd_hud_disp_mindist
         field: hud_disp_mindist
-        min: 0
+        min: 1
         max: 30        
       - name: osd_hud_disp_maxdist
         field: hud_disp_maxdist

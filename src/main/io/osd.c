@@ -2702,7 +2702,7 @@ void pgResetFn_osdConfig(osdConfig_t *osdConfig)
     osdConfig->hud_margin_v = 3;
     osdConfig->hud_disp_home = 1;
     osdConfig->hud_disp_wp = 6;
-    osdConfig->hud_disp_mindist = 2;
+    osdConfig->hud_disp_mindist = 1;
     osdConfig->hud_disp_maxdist = 4000;
     osdConfig->hud_debug = 0;
     osdConfig->horizon_offset = 0;

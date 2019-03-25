@@ -105,8 +105,8 @@ int radarGetNearestPoi()
          if ((radar_pois[i].distance > 0) && (radar_pois[i].distance < min)) { // (radar_pois[i].state == 1)
             min = radar_pois[i].distance;
             poi = i;
-            }
         }
+    }
     return poi;
 }
 
@@ -122,8 +122,8 @@ int radarGetFarthestPoi()
          if ((radar_pois[i].distance > max) && (radar_pois[i].distance <= osdConfig()->hud_disp_maxdist)) { // (radar_pois[i].state == 1)
             max = radar_pois[i].distance;
             poi = i;
-            }
         }
+    }
     return poi;
 }
 /* Display one POI on the hud, centered on crosshair position.
