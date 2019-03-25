@@ -71,6 +71,8 @@ gpsLocation_t GPS_home;
 uint16_t      GPS_distanceToHome;        // distance to home point in meters
 int16_t       GPS_directionToHome;       // direction to home point in degrees
 
+radar_pois_t radar_pois[RADAR_MAX_POIS];
+
 #if defined(USE_NAV)
 #if defined(NAV_NON_VOLATILE_WAYPOINT_STORAGE)
 PG_DECLARE_ARRAY(navWaypoint_t, NAV_MAX_WAYPOINTS, nonVolatileWaypointList);
@@ -126,7 +128,7 @@ PG_RESET_TEMPLATE(navConfig_t, navConfig,
         .braking_boost_timeout = 750,           // Timout boost after 750ms
         .braking_boost_speed_threshold = 150,   // Boost can happen only above 1.5m/s
         .braking_boost_disengage_speed = 100,   // Disable boost at 1m/s
-        .braking_bank_angle = 40,               // Max braking angle     
+        .braking_bank_angle = 40,               // Max braking angle
     },
 
     // Fixed wing
@@ -1918,6 +1920,13 @@ static int32_t calculateBearingFromDelta(float deltaX, float deltaY)
     return wrap_36000(RADIANS_TO_CENTIDEGREES(atan2_approx(deltaY, deltaX)));
 }
 
+uint32_t calculateAltitudeToMe(const fpVector3_t * destinationPos)
+{
+    const float deltaZ = destinationPos->z - navGetCurrentActualPositionAndVelocity()->pos.z;
+
+    return deltaZ;
+}
+
 uint32_t calculateDistanceToDestination(const fpVector3_t * destinationPos)
 {
     const navEstimatedPosVel_t *posvel = navGetCurrentActualPositionAndVelocity();
@@ -2167,6 +2176,41 @@ void updateHomePosition(void)
             updateHomePositionCompatibility();
         }
     }
+}
+
+/*-----------------------------------------------------------
+ * Radar, get the point of interests from the waypoints 1 to 5
+ *-----------------------------------------------------------*/
+
+static void radarUpdatePois(void){
+    gpsLocation_t poi_position;
+    fpVector3_t poi;
+
+    for (int i = 0; i < RADAR_MAX_POIS; i++) {
+        getWaypoint(i + 1, &radar_pois[i].waypoint);
+        
+        if (radar_pois[i].waypoint.lat != 0 && radar_pois[i].waypoint.lon != 0) {
+            radar_pois[i].waypoint_id = i + 1;
+
+            // radar_pois[i].speed = radar_pois[i].waypoint.p1 / 100; // Speed of the other aircraft in m/s ?
+            radar_pois[i].ticker = radar_pois[i].waypoint.p2; // Counts from 0 to 255 then back to 0
+            radar_pois[i].state = radar_pois[i].waypoint.p3; // 0=undefined, 1=armed, 2=hidden
+
+            poi_position.lat = radar_pois[i].waypoint.lat;
+            poi_position.lon = radar_pois[i].waypoint.lon;
+            poi_position.alt = radar_pois[i].waypoint.alt;
+
+            geoConvertGeodeticToLocal(&poi, &posControl.gpsOrigin, &poi_position, GEO_ALT_RELATIVE);
+
+            radar_pois[i].distance = calculateDistanceToDestination(&poi) / 100; // In meters
+            radar_pois[i].direction = calculateBearingToDestination(&poi) / 100; // In °
+            radar_pois[i].altitude = calculateAltitudeToMe(&poi) / 100; // In meters, - is below
+        }
+        else {
+            radar_pois[i].state = 0;
+        }
+    }
+
 }
 
 /*-----------------------------------------------------------
@@ -3004,6 +3048,9 @@ void updateWaypointsAndNavigationMode(void)
 
     // Map navMode back to enabled flight modes
     switchNavigationFlightModes();
+
+    // Update Inav Radar
+    radarUpdatePois();
 
 #if defined(NAV_BLACKBOX)
     navCurrentState = (int16_t)posControl.navPersistentId;

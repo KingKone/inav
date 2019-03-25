@@ -225,6 +225,20 @@ typedef struct {
     uint8_t flag;
 } navWaypoint_t;
 
+typedef struct radar_pois_s {
+    navWaypoint_t waypoint;
+    uint8_t waypoint_id;
+    uint8_t state;
+    uint16_t distance;
+    int16_t altitude;
+    int16_t direction;
+    uint16_t speed;
+    uint8_t ticker;
+} radar_pois_t;
+
+#define RADAR_MAX_POIS 6
+extern radar_pois_t radar_pois[RADAR_MAX_POIS];
+
 typedef struct {
     fpVector3_t pos;
     int32_t     yaw;             // deg * 100
