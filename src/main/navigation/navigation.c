@@ -2179,41 +2179,6 @@ void updateHomePosition(void)
 }
 
 /*-----------------------------------------------------------
- * Radar, get the point of interests from the waypoints 1 to 5
- *-----------------------------------------------------------*/
-
-static void radarUpdatePois(void){
-    gpsLocation_t poi_position;
-    fpVector3_t poi;
-
-    for (int i = 0; i < RADAR_MAX_POIS; i++) {
-        getWaypoint(i + 1, &radar_pois[i].waypoint);
-        
-        if (radar_pois[i].waypoint.lat != 0 && radar_pois[i].waypoint.lon != 0) {
-            radar_pois[i].waypoint_id = i + 1;
-
-            // radar_pois[i].speed = radar_pois[i].waypoint.p1 / 100; // Speed of the other aircraft in m/s ?
-            radar_pois[i].ticker = radar_pois[i].waypoint.p2; // Counts from 0 to 255 then back to 0
-            radar_pois[i].state = radar_pois[i].waypoint.p3; // 0=undefined, 1=armed, 2=hidden
-
-            poi_position.lat = radar_pois[i].waypoint.lat;
-            poi_position.lon = radar_pois[i].waypoint.lon;
-            poi_position.alt = radar_pois[i].waypoint.alt;
-
-            geoConvertGeodeticToLocal(&poi, &posControl.gpsOrigin, &poi_position, GEO_ALT_RELATIVE);
-
-            radar_pois[i].distance = calculateDistanceToDestination(&poi) / 100; // In meters
-            radar_pois[i].direction = calculateBearingToDestination(&poi) / 100; // In °
-            radar_pois[i].altitude = calculateAltitudeToMe(&poi) / 100; // In meters, - is below
-        }
-        else {
-            radar_pois[i].state = 0;
-        }
-    }
-
-}
-
-/*-----------------------------------------------------------
  * Update flight statistics
  *-----------------------------------------------------------*/
 static void updateNavigationFlightStatistics(void)
@@ -2546,6 +2511,21 @@ void resetWaypointList(void)
         posControl.waypointCount = 0;
         posControl.waypointListValid = false;
     }
+}
+
+/*-----------------------------------------------------------
+ * Radar, calc dir, dis and relative alt
+ *-----------------------------------------------------------*/
+
+void radarCalc(uint8_t poiNumber) {
+    fpVector3_t poi;
+    // radar_pois[i].speed = radar_pois[i].waypoint.p1 / 100; // Speed of the other aircraft in m/s ?
+    //radar_pois[poiNumber].ticker = radar_pois[i].waypoint.p2; // Counts from 0 to 255 then back to 0
+    //radar_pois[i].state = radar_pois[i].waypoint.p3; // 0=undefined, 1=armed, 2=hidden
+    geoConvertGeodeticToLocal(&poi, &posControl.gpsOrigin, &radar_pois[poiNumber].gps, GEO_ALT_RELATIVE);
+    radar_pois[poiNumber].distance = calculateDistanceToDestination(&poi) / 100; // In meters
+    radar_pois[poiNumber].direction = calculateBearingToDestination(&poi) / 100; // In °
+    radar_pois[poiNumber].altitude = calculateAltitudeToMe(&poi) / 100; // In meters, - is below
 }
 
 bool isWaypointListValid(void)
@@ -3050,7 +3030,7 @@ void updateWaypointsAndNavigationMode(void)
     switchNavigationFlightModes();
 
     // Update Inav Radar
-    radarUpdatePois();
+    //radarUpdatePois();
 
 #if defined(NAV_BLACKBOX)
     navCurrentState = (int16_t)posControl.navPersistentId;
