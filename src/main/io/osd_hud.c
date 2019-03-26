@@ -24,7 +24,7 @@
 #include "navigation/navigation.h"
 #include "common/printf.h"
 
-#define HUD_DRAWN_MAXCHARS 42 // 7 POI (1 home, 4 radar, 3 waypoints) x 6 chars max for each
+#define HUD_DRAWN_MAXCHARS 48 // 8 POI (1 home, 4 radar, 3 waypoints) x 6 chars max for each
 
 static int8_t hud_drawn[HUD_DRAWN_MAXCHARS][2];
 static int8_t hud_drawn_pt;
@@ -130,8 +130,7 @@ int radarGetFarthestPoi()
  * poiDistance and poiAltitude in meters, poiAltitude is relative to the aircraft (negative means below)
  */
 
-void osdHudDrawPoi(uint32_t poiDistance, int16_t poiDirection, int32_t poiAltitude,
-                          uint16_t poiSymbol)
+void osdHudDrawPoi(uint32_t poiDistance, int16_t poiDirection, int32_t poiAltitude, uint8_t poiSignal, uint16_t poiSymbol)
     {
     int poi_x;
     int poi_y;
@@ -139,10 +138,10 @@ void osdHudDrawPoi(uint32_t poiDistance, int16_t poiDirection, int32_t poiAltitu
     uint8_t center_y;
     bool poi_is_oos = 0;
 
-    uint8_t minX = osdConfig()->hud_margin_h;
-    uint8_t maxX = osdDisplayPort->cols - osdConfig()->hud_margin_h - 1;
+    uint8_t minX = osdConfig()->hud_margin_h + 1;
+    uint8_t maxX = osdDisplayPort->cols - osdConfig()->hud_margin_h - 2;
     uint8_t minY = osdConfig()->hud_margin_v;
-    uint8_t maxY = osdDisplayPort->rows - osdConfig()->hud_margin_v - 1;
+    uint8_t maxY = osdDisplayPort->rows - osdConfig()->hud_margin_v - 2;
 
     osdCrosshairPosition(&center_x, &center_y);
 
@@ -160,7 +159,7 @@ void osdHudDrawPoi(uint32_t poiDistance, int16_t poiDirection, int32_t poiAltitu
         poi_x = maxX;
         poi_y = center_y - 2;
         uint16_t c;
-        while (displayReadCharWithAttr(osdDisplayPort, poi_x, poi_y, &c, NULL) && c != SYM_BLANK && poi_y < maxY - 1) {
+        while (displayReadCharWithAttr(osdDisplayPort, poi_x, poi_y, &c, NULL) && c != SYM_BLANK && poi_y < maxY - 3) {
             poi_y += 2;
         }
         osdHudWrite(poi_x + 1, poi_y, SYM_AH_RIGHT, 1);
@@ -169,7 +168,7 @@ void osdHudDrawPoi(uint32_t poiDistance, int16_t poiDirection, int32_t poiAltitu
         poi_x = minX;
         poi_y = center_y - 2;
         uint16_t c;
-        while (displayReadCharWithAttr(osdDisplayPort, poi_x, poi_y, &c, NULL) && c != SYM_BLANK && poi_y < maxY - 1) {
+        while (displayReadCharWithAttr(osdDisplayPort, poi_x, poi_y, &c, NULL) && c != SYM_BLANK && poi_y < maxY - 3) {
             poi_y += 2;
         }
         osdHudWrite(poi_x + 1, poi_y, SYM_AH_LEFT, 1);
@@ -186,6 +185,10 @@ void osdHudDrawPoi(uint32_t poiDistance, int16_t poiDirection, int32_t poiAltitu
 
     osdHudWrite(poi_x, poi_y, poiSymbol, 1);
 
+    if (poiSignal < 5) {
+        osdHudWrite(poi_x - 1, poi_y, SYM_HUD_SIGNAL_0 + poiSignal, 1);
+        }
+    
     char buff[3];
     if ((osd_unit_e)osdConfig()->units == OSD_UNIT_IMPERIAL) {
         osdFormatCentiNumber(buff, CENTIMETERS_TO_CENTIFEET(poiDistance * 100), FEET_PER_MILE, 0, 3, 3);

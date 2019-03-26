@@ -230,17 +230,22 @@ typedef struct radar_pois_s {
     uint8_t state;
     uint16_t heading;
     uint16_t speed;
-    uint16_t distance;
-    int16_t altitude;
-    int16_t direction;
-    uint8_t ticker;
     char c1;
     char c2;
     char c3;
-    uint8_t seqNum;
+    uint8_t ticker;
+    uint32_t pasttime;
+    uint8_t pasttick;
+    uint8_t signal;
+    uint16_t distance;
+    int16_t altitude;
+    int16_t direction;
 } radar_pois_t;
 
 #define RADAR_MAX_POIS 6
+#define RADAR_UPDATE_HZ 2 // 
+#define RADAR_TICK_DELAY 4000 // 4 seconds
+
 extern radar_pois_t radar_pois[RADAR_MAX_POIS];
 
 typedef struct {

@@ -287,7 +287,7 @@ void osdHudClear();
 int osdHudWrite(uint8_t x, uint8_t y, uint16_t symb, bool crush);
 void osdHudDrawCrosshair(uint8_t px, uint8_t py);
 void osdHudDrawHoming(uint8_t px, uint8_t py);
-void osdHudDrawPoi(uint32_t poiDistance, int16_t poiDirection, int32_t poiAltitude, uint16_t poiSymbol);
+void osdHudDrawPoi(uint32_t poiDistance, int16_t poiDirection, int32_t poiAltitude, uint8_t poiSignal, uint16_t poiSymbol);
 void osdHudDrawDebug(uint8_t px, uint8_t py);
 
 // Radar -----

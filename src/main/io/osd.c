@@ -1661,13 +1661,13 @@ static bool osdDrawSingleElement(uint8_t item)
                 }
 
                 if (osdConfig()->hud_disp_home) {
-                    osdHudDrawPoi(GPS_distanceToHome, GPS_directionToHome, -osdGetAltitude() / 100, SYM_HOME);
+                    osdHudDrawPoi(GPS_distanceToHome, GPS_directionToHome, -osdGetAltitude() / 100, 5, SYM_HOME);
                 }
 
                 if (osdConfig()->hud_disp_radar > 0) {
                     for (int i = 0; i < osdConfig()->hud_disp_radar; i++) {
                         if ((radar_pois[i].distance >= (osdConfig()->hud_disp_mindist)) && (radar_pois[i].distance <= (osdConfig()->hud_disp_maxdist))) {
-                            osdHudDrawPoi(radar_pois[i].distance, osdGetHeadingAngle(radar_pois[i].direction), radar_pois[i].altitude, 65 + i);
+                            osdHudDrawPoi(radar_pois[i].distance, osdGetHeadingAngle(radar_pois[i].direction), radar_pois[i].altitude, radar_pois[i].signal, 65 + i);
                         }
                     }
                 }

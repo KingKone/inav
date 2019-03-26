@@ -2519,13 +2519,21 @@ void resetWaypointList(void)
 
 void radarCalc(uint8_t poiNumber) {
     fpVector3_t poi;
-    // radar_pois[i].speed = radar_pois[i].waypoint.p1 / 100; // Speed of the other aircraft in m/s ?
-    //radar_pois[poiNumber].ticker = radar_pois[i].waypoint.p2; // Counts from 0 to 255 then back to 0
-    //radar_pois[i].state = radar_pois[i].waypoint.p3; // 0=undefined, 1=armed, 2=hidden
+
     geoConvertGeodeticToLocal(&poi, &posControl.gpsOrigin, &radar_pois[poiNumber].gps, GEO_ALT_RELATIVE);
     radar_pois[poiNumber].distance = calculateDistanceToDestination(&poi) / 100; // In meters
     radar_pois[poiNumber].direction = calculateBearingToDestination(&poi) / 100; // In °
     radar_pois[poiNumber].altitude = calculateAltitudeToMe(&poi) / 100; // In meters, - is below
+
+    uint32_t now = millis();
+    uint16_t diff_time = now - radar_pois[poiNumber].pasttime;
+    
+    if (diff_time > RADAR_TICK_DELAY) {
+        int diff_tick = (radar_pois[poiNumber].ticker - radar_pois[poiNumber].pasttick) % 255;
+        radar_pois[poiNumber].signal = constrain((diff_tick + 1) * RADAR_UPDATE_HZ * 1000 / RADAR_TICK_DELAY, 0 , 4); 
+        radar_pois[poiNumber].pasttime = now;
+        radar_pois[poiNumber].pasttick = radar_pois[poiNumber].ticker; 
+    }
 }
 
 bool isWaypointListValid(void)

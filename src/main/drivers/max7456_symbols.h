@@ -204,6 +204,12 @@
 #define SYM_TEMP_SENSOR_LAST      0xF7
 #define TEMP_SENSOR_SYM_COUNT     (SYM_TEMP_SENSOR_LAST - SYM_TEMP_SENSOR_FIRST + 1)
 
+#define SYM_HUD_SIGNAL_0          0xF8  // Hud signal icon 0
+#define SYM_HUD_SIGNAL_1          0xF9  // Hud signal icon 1
+#define SYM_HUD_SIGNAL_2          0xFA  // Hud signal icon 2
+#define SYM_HUD_SIGNAL_3          0xFB  // Hud signal icon 3
+#define SYM_HUD_SIGNAL_4          0xFC  // Hud signal icon 4
+
 #define SYM_LOGO_START            0x101 // 257 to 280, INAV logo
 #define SYM_LOGO_WIDTH            6
 #define SYM_LOGO_HEIGHT           4
@@ -227,12 +233,6 @@
 #define SYM_HUD_ARROWS_D2         0x1AC // 428 Smart crosshair
 #define SYM_HUD_ARROWS_D3         0x1AD // 429 Smart crosshair
 
-#define SYM_HUD_0                 0x1AE // 430 to 439 Zero to 9
-#define SYM_HUD_A                 0x1B8 // 440 to 447 A to H
-#define SYM_HUD_LEFT              0x1C0 // 448 Left arrow
-#define SYM_HUD_RIGHT             0x1C1 // 449 Right arrow
-#define SYM_HUD_POI               0x1C2 // 450 POI
-#define SYM_HUD_DIS               0x1C3 // 451 DIStance
-#define SYM_HUD_ALT               0x1C4 // 452 ALTitude
+
 
 #endif // USE_MAX7456
