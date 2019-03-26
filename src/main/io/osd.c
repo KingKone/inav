@@ -1643,20 +1643,20 @@ static bool osdDrawSingleElement(uint8_t item)
 #endif
         break;
 
-    case OSD_CROSSHAIRS: // For now the hud is a subset of the crossair, might change this later
+    case OSD_CROSSHAIRS: 
 
         osdCrosshairPosition(&elemPosX, &elemPosY);
         osdHudDrawCrosshair(elemPosX, elemPosY);
-
+      
         if (osdConfig()->homing && STATE(GPS_FIX) && STATE(GPS_FIX_HOME) && isImuHeadingValid()) {
             osdHudDrawHoming(elemPosX, elemPosY);
         }
 
-        if (((osd_hud_mode_e)osdConfig()->hud_mode != OSD_HUD_MODE_OFF) && (STATE(GPS_FIX) && isImuHeadingValid())) {
+        if (((osd_hudmode_e)osdConfig()->hudmode != OSD_HUDMODE_OFF) && (STATE(GPS_FIX) && isImuHeadingValid())) {
 
-            if ((osd_hud_mode_e)osdConfig()->hud_mode == OSD_HUD_MODE_3D) { // 3D mode
+            if ((osd_hudmode_e)osdConfig()->hudmode == OSD_HUDMODE_3D) { // 3D mode
 
-                if (osdConfig()->hud_disp_home || osdConfig()->hud_disp_wp > 0) {
+                if (osdConfig()->hud_disp_home || osdConfig()->hud_disp_radar > 0) {
                     osdHudClear();
                 }
 
@@ -1664,20 +1664,20 @@ static bool osdDrawSingleElement(uint8_t item)
                     osdHudDrawPoi(GPS_distanceToHome, GPS_directionToHome, -osdGetAltitude() / 100, SYM_HOME);
                 }
 
-                if (osdConfig()->hud_disp_wp > 0) {
-                    for (int i = 0; i < osdConfig()->hud_disp_wp; i++) {
+                if (osdConfig()->hud_disp_radar > 0) {
+                    for (int i = 0; i < osdConfig()->hud_disp_radar; i++) {
                         if ((radar_pois[i].distance >= (osdConfig()->hud_disp_mindist)) && (radar_pois[i].distance <= (osdConfig()->hud_disp_maxdist))) {
                             osdHudDrawPoi(radar_pois[i].distance, osdGetHeadingAngle(radar_pois[i].direction), radar_pois[i].altitude, 65 + i);
                         }
                     }
                 }
             }
-            else if ((osd_hud_mode_e)osdConfig()->hud_mode == OSD_HUD_MODE_MAP) { // Map, view from the top, only the closest POI for now
+            else if ((osd_hudmode_e)osdConfig()->hudmode == OSD_HUDMODE_MAP) { // Map, view from the top, only the closest POI for now
 
                 static uint16_t drawn = 0;
                 static uint32_t scale = 0;
                 
-                if (osdConfig()->hud_disp_wp > 0) {
+                if (osdConfig()->hud_disp_radar > 0) {
                 
                     int poi_id = radarGetNearestPoi();
                 
@@ -2697,11 +2697,12 @@ void pgResetFn_osdConfig(osdConfig_t *osdConfig)
     osdConfig->camera_uptilt = 0;
     osdConfig->camera_fov_h = 135;
     osdConfig->camera_fov_v = 85;
-    osdConfig->hud_mode = OSD_HUD_MODE_3D;
+    osdConfig->hudmode = OSD_HUDMODE_3D;
     osdConfig->hud_margin_h = 6;
     osdConfig->hud_margin_v = 3;
     osdConfig->hud_disp_home = 1;
-    osdConfig->hud_disp_wp = 6;
+    osdConfig->hud_disp_radar = 4;
+    osdConfig->hud_disp_wp = 0;
     osdConfig->hud_disp_mindist = 1;
     osdConfig->hud_disp_maxdist = 4000;
     osdConfig->hud_debug = 0;

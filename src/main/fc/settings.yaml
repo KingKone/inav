@@ -89,9 +89,9 @@ tables:
   - name: osd_homing_focus
     values: ["NARROW", "MEDIUM", "WIDE"]
     enum: osd_homing_focus_e
-  - name: osd_hud_mode
+  - name: osd_hudmode
     values: ["OFF", "3D", "MAP"]
-    enum: osd_hud_mode_e
+    enum: osd_hudmode_e
   - name: osd_sidebar_scroll
     values: ["NONE", "ALTITUDE", "GROUND_SPEED", "HOME_DISTANCE"]
     enum: osd_sidebar_scroll_e
@@ -1663,9 +1663,9 @@ groups:
         field: camera_fov_v
         min: 30
         max: 120
-      - name: osd_hud_mode
-        field: hud_mode
-        table: osd_hud_mode
+      - name: osd_hudmode
+        field: hudmode
+        table: osd_hudmode
         type: uint8_t
       - name: osd_hud_margin_h
         field: hud_margin_h
@@ -1678,10 +1678,14 @@ groups:
       - name: osd_hud_disp_home
         field: hud_disp_home
         type: bool
+      - name: osd_hud_disp_radar
+        field: hud_disp_radar
+        min: 0
+        max: 4
       - name: osd_hud_disp_wp
         field: hud_disp_wp
         min: 0
-        max: 6
+        max: 3
       - name: osd_hud_disp_mindist
         field: hud_disp_mindist
         min: 1

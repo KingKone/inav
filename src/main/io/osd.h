@@ -181,10 +181,10 @@ typedef enum {
 } osd_homing_focus_e;
 
 typedef enum {
-    OSD_HUD_MODE_OFF,
-    OSD_HUD_MODE_3D,
-    OSD_HUD_MODE_MAP,  
-} osd_hud_mode_e;
+    OSD_HUDMODE_OFF,
+    OSD_HUDMODE_3D,
+    OSD_HUDMODE_MAP,  
+} osd_hudmode_e;
 
 typedef enum {
     OSD_SIDEBAR_SCROLL_NONE,
@@ -231,10 +231,11 @@ typedef struct osdConfig_s {
     int8_t camera_uptilt;
     uint8_t camera_fov_h;
     uint8_t camera_fov_v;
-    uint8_t hud_mode; // from osd_hud_mode_e
+    uint8_t hudmode; // from osd_hudmode_e
     uint8_t hud_margin_h;
     uint8_t hud_margin_v;
     bool hud_disp_home;
+    uint8_t hud_disp_radar;    
     uint8_t hud_disp_wp;
     uint16_t hud_disp_mindist;
     uint16_t hud_disp_maxdist;

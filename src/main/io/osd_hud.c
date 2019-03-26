@@ -24,7 +24,7 @@
 #include "navigation/navigation.h"
 #include "common/printf.h"
 
-#define HUD_DRAWN_MAXCHARS 42 // 7 POI (1 home, 6 aicrafts) x 6 chars max for each
+#define HUD_DRAWN_MAXCHARS 42 // 7 POI (1 home, 4 radar, 3 waypoints) x 6 chars max for each
 
 static int8_t hud_drawn[HUD_DRAWN_MAXCHARS][2];
 static int8_t hud_drawn_pt;
@@ -315,11 +315,11 @@ void osdHudDrawDebug(uint8_t px, uint8_t py)
     char buftmp[15];
 
     if (poi_id >= 0) {
-        tfp_sprintf(buftmp, "%c%10d", SYM_LAT,  radar_pois[poi_id].waypoint.lat);
+        tfp_sprintf(buftmp, "%c%10d", SYM_LAT,  radar_pois[poi_id].gps.lat);
         displayWrite(osdDisplayPort, px, py, buftmp);
-        tfp_sprintf(buftmp, "%c%10d", SYM_LON,  radar_pois[poi_id].waypoint.lon);
+        tfp_sprintf(buftmp, "%c%10d", SYM_LON,  radar_pois[poi_id].gps.lon);
         displayWrite(osdDisplayPort, px, py + 1, buftmp);
-        tfp_sprintf(buftmp, "%c%10d", SYM_ALT_M,  radar_pois[poi_id].waypoint.alt);
+        tfp_sprintf(buftmp, "%c%10d", SYM_ALT_M,  radar_pois[poi_id].gps.alt);
         displayWrite(osdDisplayPort, px, py + 2, buftmp);
         tfp_sprintf(buftmp, "%3d", radar_pois[poi_id].ticker);
         displayWrite(osdDisplayPort, px, py + 3, buftmp);
