@@ -86,9 +86,18 @@ tables:
   - name: osd_crosshairs_style
     values: ["DEFAULT", "AIRCRAFT", "TYPE3", "TYPE4", "TYPE5", "TYPE6", "TYPE7"]
     enum: osd_crosshairs_style_e
+<<<<<<< HEAD
   - name: osd_hud_mode
     values: ["OFF", "3D", "MAP"]
     enum: osd_hud_mode_e
+=======
+  - name: osd_homing_focus
+    values: ["NARROW", "MEDIUM", "WIDE"]
+    enum: osd_homing_focus_e
+  - name: osd_hudmode
+    values: ["OFF", "3D", "MAP"]
+    enum: osd_hudmode_e
+>>>>>>> dh_radar_msp
   - name: osd_sidebar_scroll
     values: ["NONE", "ALTITUDE", "GROUND_SPEED", "HOME_DISTANCE"]
     enum: osd_sidebar_scroll_e
@@ -1659,10 +1668,20 @@ groups:
       - name: osd_horizon_offset
         field: horizon_offset
         min: -2
+<<<<<<< HEAD
         max: 2
       - name: osd_hud_mode
         field: hud_mode
         table: osd_hud_mode
+=======
+        max: 2        
+      - name: osd_homing
+        field: homing
+        type: bool
+      - name: osd_homing_focus
+        field: homing_focus
+        table: osd_homing_focus
+>>>>>>> dh_radar_msp
         type: uint8_t
       - name: osd_camera_uptilt
         field: camera_uptilt
@@ -1676,6 +1695,13 @@ groups:
         field: camera_fov_v
         min: 30
         max: 120
+<<<<<<< HEAD
+=======
+      - name: osd_hudmode
+        field: hudmode
+        table: osd_hudmode
+        type: uint8_t
+>>>>>>> dh_radar_msp
       - name: osd_hud_margin_h
         field: hud_margin_h
         min: 0
@@ -1683,6 +1709,7 @@ groups:
       - name: osd_hud_margin_v
         field: hud_margin_v
         min: 0
+<<<<<<< HEAD
         max: 4
       - name: osd_hud_homing
         field: hud_homing
@@ -1709,6 +1736,31 @@ groups:
         field: hud_radar_cycle
         min: 100
         max: 2000
+=======
+        max: 4       
+      - name: osd_hud_disp_home
+        field: hud_disp_home
+        type: bool
+      - name: osd_hud_disp_radar
+        field: hud_disp_radar
+        min: 0
+        max: 4
+      - name: osd_hud_disp_wp
+        field: hud_disp_wp
+        min: 0
+        max: 3
+      - name: osd_hud_disp_mindist
+        field: hud_disp_mindist
+        min: 1
+        max: 30        
+      - name: osd_hud_disp_maxdist
+        field: hud_disp_maxdist
+        min: 100
+        max: 9990
+      - name: osd_hud_debug
+        field: hud_debug
+        type: bool
+>>>>>>> dh_radar_msp
       - name: osd_left_sidebar_scroll
         field: left_sidebar_scroll
         table: osd_sidebar_scroll

@@ -162,6 +162,7 @@ static bool fullRedraw = false;
 
 static uint8_t armState;
 
+<<<<<<< HEAD
 typedef struct osdMapData_s {
     uint32_t scale;
     char referenceSymbol;
@@ -169,6 +170,8 @@ typedef struct osdMapData_s {
 
 static osdMapData_t osdMapData;
 
+=======
+>>>>>>> dh_radar_msp
 displayPort_t *osdDisplayPort;
 
 #define AH_MAX_PITCH_DEFAULT 20 // Specify default maximum AHI pitch value displayed (degrees)
@@ -810,8 +813,16 @@ static void osdUpdateBatteryCapacityOrVoltageTextAttributes(textAttributes_t *at
 
 void osdCrosshairPosition(uint8_t *x, uint8_t *y)
 {
+<<<<<<< HEAD
     *x = osdDisplayPort->cols / 2;
     *y = osdDisplayPort->rows / 2;
+=======
+    *x = 14;
+    *y = 6;
+    if (IS_DISPLAY_PAL) {
+        ++(*y);
+    }
+>>>>>>> dh_radar_msp
     *y += osdConfig()->horizon_offset;
 }
 
@@ -1624,6 +1635,7 @@ static bool osdDrawSingleElement(uint8_t item)
 #endif
         break;
 
+<<<<<<< HEAD
     case OSD_CROSSHAIRS: // Hud is a sub-element of the crosshair
 
         osdCrosshairPosition(&elemPosX, &elemPosY);
@@ -1678,6 +1690,60 @@ static bool osdDrawSingleElement(uint8_t item)
 
         if (osdConfig()->hud_radar_nearest) {
             osdHudDrawNearest(elemPosX - 6, elemPosY + 2);
+=======
+    case OSD_CROSSHAIRS: 
+
+        osdCrosshairPosition(&elemPosX, &elemPosY);
+        osdHudDrawCrosshair(elemPosX, elemPosY);
+      
+        if (osdConfig()->homing && STATE(GPS_FIX) && STATE(GPS_FIX_HOME) && isImuHeadingValid()) {
+            osdHudDrawHoming(elemPosX, elemPosY);
+        }
+
+        if (((osd_hudmode_e)osdConfig()->hudmode != OSD_HUDMODE_OFF) && (STATE(GPS_FIX) && isImuHeadingValid())) {
+
+            if ((osd_hudmode_e)osdConfig()->hudmode == OSD_HUDMODE_3D) { // 3D mode
+
+                if (osdConfig()->hud_disp_home || osdConfig()->hud_disp_radar > 0) {
+                    osdHudClear();
+                }
+
+                if (osdConfig()->hud_disp_home) {
+                    osdHudDrawPoi(GPS_distanceToHome, GPS_directionToHome, -osdGetAltitude() / 100, 5, SYM_HOME);
+                }
+
+                if (osdConfig()->hud_disp_radar > 0) {
+                    for (int i = 0; i < osdConfig()->hud_disp_radar; i++) {
+                        if ((radar_pois[i].distance >= (osdConfig()->hud_disp_mindist)) && (radar_pois[i].distance <= (osdConfig()->hud_disp_maxdist))) {
+                            osdHudDrawPoi(radar_pois[i].distance, osdGetHeadingAngle(radar_pois[i].direction), radar_pois[i].altitude, radar_pois[i].signal, 65 + i);
+                        }
+                    }
+                }
+            }
+            else if ((osd_hudmode_e)osdConfig()->hudmode == OSD_HUDMODE_MAP) { // Map, view from the top, only the closest POI for now
+
+                static uint16_t drawn = 0;
+                static uint32_t scale = 0;
+                
+                if (osdConfig()->hud_disp_radar > 0) {
+                
+                    int poi_id = radarGetNearestPoi();
+                
+                    if ((poi_id >= 0) && (radar_pois[poi_id].distance <= osdConfig()->hud_disp_maxdist)) { // At least 1 POI found, ignores min distance in map mode
+                        osdDrawMap(DECIDEGREES_TO_DEGREES(osdGetHeading()), 0, SYM_ARROW_UP, radar_pois[poi_id].distance,
+                                  osdGetHeadingAngle(radar_pois[poi_id].direction) - 180, 65 + poi_id, &drawn, &scale);
+                    }
+                }              
+                else if (osdConfig()->hud_disp_home) { // Display the home point, ignores max view distance in map mode
+                    osdDrawMap(DECIDEGREES_TO_DEGREES(osdGetHeading()), 0, SYM_ARROW_UP, GPS_distanceToHome,
+                               osdGetHeadingAngle(GPS_directionToHome) - 180, SYM_HOME, &drawn, &scale);
+                }
+            }
+        }
+
+        if (osdConfig()->hud_debug) {
+            osdHudDrawDebug(7, 2);
+>>>>>>> dh_radar_msp
         }
 
         return true;
@@ -2693,6 +2759,7 @@ void pgResetFn_osdConfig(osdConfig_t *osdConfig)
     osdConfig->ahi_reverse_roll = 0;
     osdConfig->ahi_max_pitch = AH_MAX_PITCH_DEFAULT;
     osdConfig->crosshairs_style = OSD_CROSSHAIRS_STYLE_DEFAULT;
+<<<<<<< HEAD
     osdConfig->horizon_offset = 0;
     osdConfig->camera_uptilt = 0;
     osdConfig->camera_fov_h = 135;
@@ -2707,6 +2774,23 @@ void pgResetFn_osdConfig(osdConfig_t *osdConfig)
     osdConfig->hud_radar_range_max = 4000;
     osdConfig->hud_radar_nearest = 0;
     osdConfig->hud_radar_cycle = 400;
+=======
+    osdConfig->homing = 1;
+    osdConfig->homing_focus = OSD_HOMING_FOCUS_MEDIUM;
+    osdConfig->camera_uptilt = 0;
+    osdConfig->camera_fov_h = 135;
+    osdConfig->camera_fov_v = 85;
+    osdConfig->hudmode = OSD_HUDMODE_3D;
+    osdConfig->hud_margin_h = 6;
+    osdConfig->hud_margin_v = 3;
+    osdConfig->hud_disp_home = 1;
+    osdConfig->hud_disp_radar = 4;
+    osdConfig->hud_disp_wp = 0;
+    osdConfig->hud_disp_mindist = 1;
+    osdConfig->hud_disp_maxdist = 4000;
+    osdConfig->hud_debug = 0;
+    osdConfig->horizon_offset = 0;
+>>>>>>> dh_radar_msp
     osdConfig->left_sidebar_scroll = OSD_SIDEBAR_SCROLL_NONE;
     osdConfig->right_sidebar_scroll = OSD_SIDEBAR_SCROLL_NONE;
     osdConfig->sidebar_scroll_arrows = 0;

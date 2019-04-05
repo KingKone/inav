@@ -21,7 +21,12 @@
 
 #include "config/parameter_group.h"
 
+<<<<<<< HEAD
 #include "drivers/osd.h"
+=======
+#include "drivers/vcd.h"
+#include "drivers/display.h"
+>>>>>>> dh_radar_msp
 
 #ifndef OSD_ALTERNATE_LAYOUT_COUNT
 #define OSD_ALTERNATE_LAYOUT_COUNT 3
@@ -44,9 +49,15 @@
 #define METERS_PER_KILOMETER                    1000
 #define METERS_PER_MILE                         1609
 
+<<<<<<< HEAD
 #define OSD_HOMING_LIM_H1 6
 #define OSD_HOMING_LIM_H2 16
 #define OSD_HOMING_LIM_H3 38
+=======
+#define OSD_HOMING_LIM_H1 7
+#define OSD_HOMING_LIM_H2 17
+#define OSD_HOMING_LIM_H3 40
+>>>>>>> dh_radar_msp
 #define OSD_HOMING_LIM_V1 5
 #define OSD_HOMING_LIM_V2 10
 #define OSD_HOMING_LIM_V3 15
@@ -177,10 +188,23 @@ typedef enum {
 } osd_crosshairs_style_e;
 
 typedef enum {
+<<<<<<< HEAD
     OSD_HUD_MODE_OFF,
     OSD_HUD_MODE_3D,
     OSD_HUD_MODE_MAP,
 } osd_hud_mode_e;
+=======
+    OSD_HOMING_FOCUS_NARROW,
+    OSD_HOMING_FOCUS_MEDIUM,
+    OSD_HOMING_FOCUS_WIDE,  
+} osd_homing_focus_e;
+
+typedef enum {
+    OSD_HUDMODE_OFF,
+    OSD_HUDMODE_3D,
+    OSD_HUDMODE_MAP,  
+} osd_hudmode_e;
+>>>>>>> dh_radar_msp
 
 typedef enum {
     OSD_SIDEBAR_SCROLL_NONE,
@@ -222,6 +246,7 @@ typedef struct osdConfig_s {
     uint8_t ahi_reverse_roll;
     uint8_t ahi_max_pitch;
     uint8_t crosshairs_style; // from osd_crosshairs_style_e
+<<<<<<< HEAD
     int8_t horizon_offset;
     uint8_t hud_mode; // from osd_hud_mode_e
     int8_t camera_uptilt;
@@ -237,6 +262,23 @@ typedef struct osdConfig_s {
     bool hud_radar_nearest;
     uint16_t hud_radar_cycle;
     
+=======
+    bool homing;
+    uint8_t homing_focus; // from osd_homing_focus_e
+    int8_t camera_uptilt;
+    uint8_t camera_fov_h;
+    uint8_t camera_fov_v;
+    uint8_t hudmode; // from osd_hudmode_e
+    uint8_t hud_margin_h;
+    uint8_t hud_margin_v;
+    bool hud_disp_home;
+    uint8_t hud_disp_radar;    
+    uint8_t hud_disp_wp;
+    uint16_t hud_disp_mindist;
+    uint16_t hud_disp_maxdist;
+    bool hud_debug;
+    int8_t horizon_offset;
+>>>>>>> dh_radar_msp
     uint8_t left_sidebar_scroll; // from osd_sidebar_scroll_e
     uint8_t right_sidebar_scroll; // from osd_sidebar_scroll_e
     uint8_t sidebar_scroll_arrows;
@@ -269,8 +311,11 @@ void osdOverrideLayout(int layout, timeMs_t duration);
 int osdGetActiveLayout(bool *overridden);
 bool osdItemIsFixed(osd_items_e item);
 
+<<<<<<< HEAD
 displayPort_t *osdGetDisplayPort(void);
 
+=======
+>>>>>>> dh_radar_msp
 int16_t osdGetHeading(void);
 int32_t osdGetAltitude(void);
 void osdDrawHomeMap(int referenceHeading, uint8_t referenceSym, uint16_t *drawn, uint32_t *usedScale);
@@ -287,10 +332,20 @@ int osdHudWrite(uint8_t x, uint8_t y, uint16_t symb, bool crush);
 void osdHudDrawCrosshair(uint8_t px, uint8_t py);
 void osdHudDrawHoming(uint8_t px, uint8_t py);
 void osdHudDrawPoi(uint32_t poiDistance, int16_t poiDirection, int32_t poiAltitude, uint8_t poiSignal, uint16_t poiSymbol);
+<<<<<<< HEAD
 void osdHudDrawNearest(uint8_t px, uint8_t py);
+=======
+void osdHudDrawDebug(uint8_t px, uint8_t py);
+>>>>>>> dh_radar_msp
 
 // Radar -----
 
 int radarGetNearestPoi();
 int radarGetFarthestPoi();
+<<<<<<< HEAD
 void radarUpdateSignal(uint8_t poi_id);
+=======
+
+
+
+>>>>>>> dh_radar_msp

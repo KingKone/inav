@@ -127,9 +127,13 @@ PG_RESET_TEMPLATE(navConfig_t, navConfig,
         .braking_boost_timeout = 750,           // Timout boost after 750ms
         .braking_boost_speed_threshold = 150,   // Boost can happen only above 1.5m/s
         .braking_boost_disengage_speed = 100,   // Disable boost at 1m/s
+<<<<<<< HEAD
         .braking_bank_angle = 40,               // Max braking angle     
         .posDecelerationTime = 120,             // posDecelerationTime * 100
         .posResponseExpo = 10,                  // posResponseExpo * 100
+=======
+        .braking_bank_angle = 40,               // Max braking angle
+>>>>>>> dh_radar_msp
     },
 
     // Fixed wing
@@ -2525,7 +2529,11 @@ void resetWaypointList(void)
 }
 
 /*-----------------------------------------------------------
+<<<<<<< HEAD
  * Radar, calculate direction, distance, relative altitude and signal strength
+=======
+ * Radar, calc dir, dis and relative alt
+>>>>>>> dh_radar_msp
  *-----------------------------------------------------------*/
 
 void radarCalc(uint8_t poiNumber) {
@@ -2535,6 +2543,19 @@ void radarCalc(uint8_t poiNumber) {
     radar_pois[poiNumber].distance = calculateDistanceToDestination(&poi) / 100; // In meters
     radar_pois[poiNumber].direction = calculateBearingToDestination(&poi) / 100; // In °
     radar_pois[poiNumber].altitude = calculateAltitudeToMe(&poi) / 100; // In meters, - is below
+<<<<<<< HEAD
+=======
+
+    uint32_t now = millis();
+    uint16_t diff_time = now - radar_pois[poiNumber].pasttime;
+    
+    if (diff_time > RADAR_TICK_DELAY) {
+        int diff_tick = (radar_pois[poiNumber].ticker - radar_pois[poiNumber].pasttick) % 255;
+        radar_pois[poiNumber].signal = constrain((diff_tick + 1) * RADAR_UPDATE_HZ * 1000 / RADAR_TICK_DELAY, 0 , 4); 
+        radar_pois[poiNumber].pasttime = now;
+        radar_pois[poiNumber].pasttick = radar_pois[poiNumber].ticker; 
+    }
+>>>>>>> dh_radar_msp
 }
 
 bool isWaypointListValid(void)
@@ -3037,6 +3058,9 @@ void updateWaypointsAndNavigationMode(void)
 
     // Map navMode back to enabled flight modes
     switchNavigationFlightModes();
+
+    // Update Inav Radar
+    //radarUpdatePois();
 
 #if defined(NAV_BLACKBOX)
     navCurrentState = (int16_t)posControl.navPersistentId;

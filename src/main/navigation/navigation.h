@@ -234,9 +234,15 @@ typedef struct radar_pois_s {
     uint8_t state;
     uint16_t heading;
     uint16_t speed;
+<<<<<<< HEAD
 //    char c1;
 //    char c2;
 //    char c3;
+=======
+    char c1;
+    char c2;
+    char c3;
+>>>>>>> dh_radar_msp
     uint8_t ticker;
     uint32_t pasttime;
     uint8_t pasttick;
@@ -246,8 +252,14 @@ typedef struct radar_pois_s {
     int16_t direction;
 } radar_pois_t;
 
+<<<<<<< HEAD
 #define RADAR_MAX_POIS 4
 #define RADAR_LOOPTIME 400 // 400 milliseconds, 2.5Hz
+=======
+#define RADAR_MAX_POIS 6
+#define RADAR_UPDATE_HZ 2 // 
+#define RADAR_TICK_DELAY 4000 // 4 seconds
+>>>>>>> dh_radar_msp
 
 extern radar_pois_t radar_pois[RADAR_MAX_POIS];
 

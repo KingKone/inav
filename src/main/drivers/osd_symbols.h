@@ -186,11 +186,19 @@
 
 #define SYM_ZERO_HALF_LEADING_DOT 0xD0 // 208 to 217 Numbers with leading dot
 
+<<<<<<< HEAD:src/main/drivers/osd_symbols.h
 #define SYM_AH_CH_AIRCRAFT0       0xDA // 218 Crossair aircraft left
 #define SYM_AH_CH_AIRCRAFT1       0xDB // 219 Crossair aircraft
 #define SYM_AH_CH_AIRCRAFT2       0xDC // 220 Crossair aircraft center
 #define SYM_AH_CH_AIRCRAFT3       0xDD // 221 Crossair aircraft
 #define SYM_AH_CH_AIRCRAFT4       0xDE // 222 Crossair aircraft right
+=======
+#define SYM_AH_CH_AIRCRAFT0       0xDA // 218 Crosshair aircraft 1
+#define SYM_AH_CH_AIRCRAFT1       0xDB // 219 Crosshair aircraft 2
+#define SYM_AH_CH_AIRCRAFT2       0xDC // 220 Crosshair aircraft 3
+#define SYM_AH_CH_AIRCRAFT3       0xDD // 221 Crosshair aircraft 4
+#define SYM_AH_CH_AIRCRAFT4       0xDE // 222 Crosshair aircraft 5
+>>>>>>> dh_radar_msp:src/main/drivers/max7456_symbols.h
 
 #define SYM_PITCH_DOWN            0xDF // 223 Pitch down
 
@@ -204,11 +212,19 @@
 #define SYM_TEMP_SENSOR_LAST      0xF7 // 247
 #define TEMP_SENSOR_SYM_COUNT     (SYM_TEMP_SENSOR_LAST - SYM_TEMP_SENSOR_FIRST + 1)
 
+<<<<<<< HEAD:src/main/drivers/osd_symbols.h
 #define SYM_HUD_SIGNAL_0          0xF8  // 248 Hud signal icon Lost
 #define SYM_HUD_SIGNAL_1          0xF9  // 249 Hud signal icon 25%
 #define SYM_HUD_SIGNAL_2          0xFA  // 250 Hud signal icon 50%
 #define SYM_HUD_SIGNAL_3          0xFB  // 251 Hud signal icon 75%
 #define SYM_HUD_SIGNAL_4          0xFC  // 252 Hud signal icon 100%
+=======
+#define SYM_HUD_SIGNAL_0          0xF8  // Hud signal icon 0
+#define SYM_HUD_SIGNAL_1          0xF9  // Hud signal icon 1
+#define SYM_HUD_SIGNAL_2          0xFA  // Hud signal icon 2
+#define SYM_HUD_SIGNAL_3          0xFB  // Hud signal icon 3
+#define SYM_HUD_SIGNAL_4          0xFC  // Hud signal icon 4
+>>>>>>> dh_radar_msp:src/main/drivers/max7456_symbols.h
 
 #define SYM_LOGO_START            0x101 // 257 to 280, INAV logo
 #define SYM_LOGO_WIDTH            6
@@ -233,8 +249,14 @@
 #define SYM_HUD_ARROWS_D2         0x1AC // 428 Smart crosshair
 #define SYM_HUD_ARROWS_D3         0x1AD // 429 Smart crosshair
 
+<<<<<<< HEAD:src/main/drivers/osd_symbols.h
 #else
 
 #define TEMP_SENSOR_SYM_COUNT 0
 
 #endif // USE_OSD
+=======
+
+
+#endif // USE_MAX7456
+>>>>>>> dh_radar_msp:src/main/drivers/max7456_symbols.h
