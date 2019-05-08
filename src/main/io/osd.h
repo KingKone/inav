@@ -263,8 +263,6 @@ bool osdItemIsFixed(osd_items_e item);
 
 displayPort_t *osdGetDisplayPort(void);
 
-displayPort_t *osdGetDisplayPort(void);
-
 int16_t osdGetHeading(void);
 int32_t osdGetAltitude(void);
 void osdDrawHomeMap(int referenceHeading, uint8_t referenceSym, uint16_t *drawn, uint32_t *usedScale);
@@ -287,4 +285,3 @@ void osdHudDrawNearest(uint8_t px, uint8_t py);
 
 int radarGetNearestPoi(void);
 int radarGetFarthestPoi(void);
->>>>>>> 35918ea... Hud + radar

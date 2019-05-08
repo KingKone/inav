@@ -169,12 +169,7 @@ typedef struct osdMapData_s {
 
 static osdMapData_t osdMapData;
 
-static displayPort_t *osdDisplayPort;
-=======
-typedef struct osdMapData_s {
-    uint32_t scale;
-    char referenceSymbol;
-} osdMapData_t;
+displayPort_t *osdDisplayPort;
 
 static osdMapData_t osdMapData;
 
