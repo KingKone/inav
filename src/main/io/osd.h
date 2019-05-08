@@ -260,6 +260,7 @@ void osdOverrideLayout(int layout, timeMs_t duration);
 // set by the user configuration (modes, etc..) or by overriding it.
 int osdGetActiveLayout(bool *overridden);
 bool osdItemIsFixed(osd_items_e item);
+
 displayPort_t *osdGetDisplayPort(void);
 
 displayPort_t *osdGetDisplayPort(void);
